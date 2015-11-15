@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>みんなでお絵かきチャット</title>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="wertrain">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin:0px;
+        }
+        h1 {
+            
+        }
+        div#wrapper {  
+            width: 800px;  
+            margin: 0 auto;  
+            text-align: center;
+        }
+        input.name { 
+            width: 200px;
+        }
+        input.login { 
+            width: 50px;
+        }
+    </style>
+    <script>
+    <!--
+        function login(str) {
+            var element = document.getElementById("nameInput");
+            var name = element.value;
+            if (name.length == 0) {
+                name = "名無しさん";
+            }
+            jumpUrl = "./main.html";
+            location.href = jumpUrl + "?" + "name=" + name;
+        }
+    //-->
+    </script>
+  </head>
+  <body>
+    <div id="wrapper">
+        <h1>みんなでお絵かきチャット</h1>
+        <p>
+        参加者間で一つのキャンバスを共有します。<br>
+        サーバ側は node.js、 クライアント側は tmlib.js を使用しています。<br>
+        </p>
+        <p>
+            name: <input type="text" id="nameInput" class="name">
+            <input type="submit" id="login" class="login" onclick="login()" value="入室">
+            </form>
+        </p>
+    </div>
+  </body>
+</html>
