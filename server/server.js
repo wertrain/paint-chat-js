@@ -24,7 +24,6 @@
             if (user !== null) {
                 var msg = user.name + '(' + socket.id + ')' + 'が退室しました ';
                 console.log(msg);
-                socket.broadcast.emit('disconnect', user);
             }
         });
         socket.on('message', function (message) {

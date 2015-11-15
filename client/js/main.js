@@ -16,7 +16,31 @@ window.onload = function() {
     var participantInfo = [];
     
     socketio.emit('connected', 'test');
-
+    
+    var init = function() {
+        var initColorList = function() {
+            var colorList = ["black", "red", "purple", "blue", "aqua", "yellowgreen", "yellow", "brown", "gray"]
+            var inner = '';
+            for (var i = 0; i < colorList.length; ++i) {
+                var color = colorList[i];
+                inner += '<span style="display:none"><input type="radio" name="radio_ui_color" id="radio_color_' + colorList[i] + '" value="' + (i + 1) + '" onClick="clickColorUI(this.value)"></span>';
+                inner += '<span onClick="document.getElementById(\'radio_color_' + colorList[i] + '\').click()"><img src="images/color/' + colorList[i] + '.png" id="img_color_' + colorList[i] + '"></span><br>';
+            }
+            var element = document.getElementById("colorUI");
+            element.innerHTML = inner;
+        }();
+        var initThicknessList = function() {
+            var inner = '';
+            for (var i = 0; i < 4; ++i) {
+                var num = (i + 1);
+                inner += '<span style="display:none"><input type="radio" name="radio_ui_thickness" id="radio_thickness' + num + '" value="' + num + '" onClick="clickThicknessUI(this.value)"></span>';
+                inner += '<document.getElementById(\'radio_thickness' + num +'\').click()"><img src="images/thickness' + num + '.png" id="img_thickness' + num + '"></span><br>';
+            }
+            var element = document.getElementById("thicknessUI");
+            element.innerHTML = inner;
+        }();
+    }();
+    
     socketio.on('connected', function(object) {
         user.name = object.name;
         user.id = object.id;
@@ -39,7 +63,7 @@ window.onload = function() {
         element.value = (typeof str === 'undefined' || str.length == 0) ? 
             message : message + "\n" + str;
     });
-    socket.on("disconnect", function(object) {
+    socketio.on("disconnect", function(object) {
         delete participantInfo[object.id];
         updateParticipantList();
     });
@@ -65,5 +89,17 @@ window.onload = function() {
         if(13 === code) {
             talk();
         }
+    }
+    this.clickColorUI = function(num) {
+        var colorList = ["black", "red", "purple", "blue", "aqua", "yellowgreen", "yellow", "brown", "gray"]
+        var objimg = [];
+        for (var i = 0; i < colorList.length; ++i) {
+            objimg[i] = document.getElementById("img_color_" + colorList[i]);
+            objimg[i].src = "images/color/" + colorList[i] +".png";
+        }
+        selectedColor = parseInt(num) - 1;
+        objimg[selectedColor].src = "images/color/" + colorList[selectedColor] +"_on.png";
+
+        //SelectToolAndColorFromIndex(selectedTool, selectedColor);
     }
 };

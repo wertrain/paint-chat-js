@@ -48,9 +48,6 @@
             box-shadow: 0px 0px 4px 0px #222;
         }
     </style>
-    <script src="http://cdn.rawgit.com/phi-jp/tmlib.js/0.3.0/build/tmlib.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="js/app.js"></script>
   </head>
   <body>
     <div id="wrapper">
@@ -72,36 +69,9 @@
           <span style="display:none"><input type="button" name="button_ui_tool" id="button_new" value="1" onClick="clickNewSheet(this.value)"></span>
           <span onClick="document.getElementById('button_new').click()"><img src="images/new.png" id="img_new"></span><br> 
         </form>
-        <form>
-          <span style="display:none"><input type="radio" name="radio_ui_thickness" id="radio_thickness1" value="1" onClick="clickThicknessUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_thickness1').click()"><img src="images/thickness1.png" id="img_thickness1"></span><br>
-          <span style="display:none"><input type="radio" name="radio_ui_thickness" id="radio_thickness2" value="2" onClick="clickThicknessUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_thickness2').click()"><img src="images/thickness2.png" id="img_thickness2"></span><br>
-          <span style="display:none"><input type="radio" name="radio_ui_thickness" id="radio_thickness3" value="3" onClick="clickThicknessUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_thickness3').click()"><img src="images/thickness3.png" id="img_thickness3"></span><br>
-          <span style="display:none"><input type="radio" name="radio_ui_thickness" id="radio_thickness4" value="4" onClick="clickThicknessUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_thickness4').click()"><img src="images/thickness4.png" id="img_thickness4"></span><br> 
+        <form id="thicknessUI">
         </form>
-          
-        <form>
-          <span style="display:none"><input type="radio" name="radio_ui_color" id="radio_color_black" value="1" onClick="clickColorUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_color_black').click()"><img src="images/color/black.png" id="img_color_black"></span><br>
-          <span style="display:none"><input type="radio" name="radio_ui_color" id="radio_color_red" value="2" onClick="clickColorUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_color_red').click()"><img src="images/color/red.png" id="img_color_red"></span><br>
-          <span style="display:none"><input type="radio" name="radio_ui_color" id="radio_color_purple" value="3" onClick="clickColorUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_color_purple').click()"><img src="images/color/purple.png" id="img_color_purple"></span><br>
-          <span style="display:none"><input type="radio" name="radio_ui_color" id="radio_color_blue" value="4" onClick="clickColorUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_color_blue').click()"><img src="images/color/blue.png" id="img_color_blue"></span><br>
-          <span style="display:none"><input type="radio" name="radio_ui_color" id="radio_color_aqua" value="5" onClick="clickColorUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_color_aqua').click()"><img src="images/color/aqua.png" id="img_color_aqua"></span><br>
-          <span style="display:none"><input type="radio" name="radio_ui_color" id="radio_color_yellowgreen" value="6" onClick="clickColorUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_color_yellowgreen').click()"><img src="images/color/yellowgreen.png" id="img_color_yellowgreen"></span><br>
-          <span style="display:none"><input type="radio" name="radio_ui_color" id="radio_color_yellow" value="7" onClick="clickColorUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_color_yellow').click()"><img src="images/color/yellow.png" id="img_color_yellow"></span><br>
-          <span style="display:none"><input type="radio" name="radio_ui_color" id="radio_color_brown" value="8" onClick="clickColorUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_color_brown').click()"><img src="images/color/brown.png" id="img_color_brown"></span><br>
-          <span style="display:none"><input type="radio" name="radio_ui_color" id="radio_color_gray" value="9" onClick="clickColorUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_color_gray').click()"><img src="images/color/gray.png" id="img_color_gray"></span><br>
+        <form id="colorUI">
         </form>
       </div>
       <p>
@@ -115,5 +85,8 @@
         </select>
       </p>
     </div>
+    <script src="http://cdn.rawgit.com/phi-jp/tmlib.js/0.3.0/build/tmlib.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/app.js"></script>
   </body>
 </html>
