@@ -39,6 +39,13 @@ window.onload = function() {
             var element = document.getElementById("thicknessUI");
             element.innerHTML = inner;
         }();
+        var initOther = function() {
+            var inner = '';
+            inner += '<span style="display:none"><input type="button" name="button_ui_tool" id="button_new" value="1" onClick="clickNewSheet(this.value)"></span>';
+            inner += '<span onClick="document.getElementById(\'button_new\').click()"><img src="images/new.png" id="img_new"></span><br> ';
+            var element = document.getElementById("clearUI");
+            element.innerHTML = inner;
+        }();
     }();
     
     socketio.on('connected', function(object) {
