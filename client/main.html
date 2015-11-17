@@ -7,8 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="wertrain">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="apple-touch-icon-precomposed" href="icon.png" />
-    
+
     <title>みんなでお絵かきチャット</title>
     <style>
         body {
@@ -56,14 +55,10 @@
       参加者間で一つのキャンバスを共有します。
       </p>
       <div id="paint">
-          <canvas id="canvas" width="800" height="400"></canvas>
+        <canvas id="canvas" width="800" height="400"></canvas>
       </div>
       <div id="ui">
-        <form>
-          <span style="display:none"><input type="radio" name="radio_ui_tool" id="radio_pen" value="1" onClick="clickToolsUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_pen').click()"><img src="images/pen.png" id="img_pen"></span><br> 
-          <span style="display:none"><input type="radio" name="radio_ui_tool" id="radio_eraser" value="2" onClick="clickToolsUI(this.value)"></span>
-          <span onClick="document.getElementById('radio_eraser').click()"><img src="images/eraser.png" id="img_eraser"></span><br> 
+        <form id="toolUI">
         </form>
         <form id="clearUI">
         </form>

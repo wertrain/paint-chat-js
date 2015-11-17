@@ -18,6 +18,17 @@ window.onload = function() {
     socketio.emit('connected', 'test');
     
     var init = function() {
+        var toolList = function() {
+            var toolList = ["pen", "eraser"]
+            var inner = '';
+            for (var i = 0; i < toolList.length; ++i) {
+                var num = (i + 1);
+                inner += '<span style="display:none"><input type="radio" name="radio_ui_tool" id="radio_' + toolList[i] + '" value="' + num + '" onClick="clickToolsUI(this.value)"></span>';
+                inner += '<span onClick="document.getElementById(\'radio_' + toolList[i] + '\').click()"><img src="images/' + toolList[i] + '.png" id="img_' + toolList[i] + '"></span><br> ';
+            }
+            var element = document.getElementById("toolUI");
+            element.innerHTML = inner;
+        }();
         var initColorList = function() {
             var colorList = ["black", "red", "purple", "blue", "aqua", "yellowgreen", "yellow", "brown", "gray"]
             var inner = '';
@@ -97,14 +108,26 @@ window.onload = function() {
             talk();
         }
     }
-    this.clickColorUI = function(num) {
+    this.clickThicknessUI = function(val) {
+        var objimg = new Array;
+        for (var i = 0; i < 4; ++i) {
+            var num = i + 1;
+            objimg[String(i)] = document.getElementById("img_thickness" + num);
+            objimg[String(i)].src = "images/thickness" + num +".png";
+        }
+        objimg[val].src = "images/thickness" + val +"_on.png";
+        selectedThickness = parseInt(val) - 1;
+        
+        //SelectThicknessFromIndex(selectedThickness);
+    }
+    this.clickColorUI = function(val) {
         var colorList = ["black", "red", "purple", "blue", "aqua", "yellowgreen", "yellow", "brown", "gray"]
         var objimg = [];
         for (var i = 0; i < colorList.length; ++i) {
             objimg[i] = document.getElementById("img_color_" + colorList[i]);
             objimg[i].src = "images/color/" + colorList[i] +".png";
         }
-        selectedColor = parseInt(num) - 1;
+        selectedColor = parseInt(val) - 1;
         objimg[selectedColor].src = "images/color/" + colorList[selectedColor] +"_on.png";
 
         //SelectToolAndColorFromIndex(selectedTool, selectedColor);
