@@ -4,13 +4,9 @@
 window.onload = function() {
     
     var socketio = null;
-    // heroku 上か確認したいがいい方法が見つからず
-    if (typeof process === 'undefined') {
-        socketio = io.connect('http://localhost:8080');
-    } else {
-        var port = 8080;
-        socketio = io.connect('/', { port: port });
-    }
+    socketio = io.connect('http://localhost:8080');
+    //var port = 8080;
+    //socketio = io.connect('/', { port: port });
     
     var user = {};
     var participantInfo = [];
