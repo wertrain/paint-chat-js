@@ -16,6 +16,7 @@
     io.sockets.on('connection', function (socket) {
         socket.on('connected', function (name) {
             user = {name: name, id: socket.id, canvasDataUrl: canvasDataUrl};
+            participants[socket.id] = user;
             socket.emit('connected', user);
             socket.broadcast.emit('join', user);
             var msg = user.name + '(' + socket.id + ')' + 'が入室しました ';
@@ -27,7 +28,7 @@
             if (user !== null) {
                 var msg = user.name + '(' + socket.id + ')' + 'が退室しました ';
                 console.log(msg);
-                
+                delete participants[socket.id];
                 socket.broadcast.emit('message', {name: 'システム', message: user.name + 'さんが退室しました。'});
             }
         });
@@ -49,6 +50,10 @@
         });
         socket.on('canvas', function (dataUrl) {
             canvasDataUrl = dataUrl;
+        });
+        socket.on('clearcanvas', function (object) {
+            socket.broadcast.emit('clearcanvas', object);
+            socket.emit('clearcanvas', object);
         });
     });
     

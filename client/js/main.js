@@ -38,8 +38,8 @@ window.onload = function() {
             var inner = '';
             for (var i = 0; i < colorList.length; ++i) {
                 var color = colorList[i];
-                inner += '<span style="display:none"><input type="radio" name="radio_ui_color" id="radio_color_' + colorList[i] + '" value="' + (i + 1) + '" onClick="clickColorUI(this.value)"></span>';
-                inner += '<span onClick="document.getElementById(\'radio_color_' + colorList[i] + '\').click()"><img src="images/color/' + colorList[i] + '.png" id="img_color_' + colorList[i] + '"></span><br>';
+                inner += '<span style="display:none"><input type="radio" name="radio_ui_color" id="radio_color_' + color + '" value="' + (i + 1) + '" onClick="clickColorUI(this.value)"></span>';
+                inner += '<span onClick="document.getElementById(\'radio_color_' + color + '\').click()"><img src="images/color/' + color + '.png" id="img_color_' + color + '"></span><br>';
             }
             var element = document.getElementById('colorUI');
             element.innerHTML = inner;
@@ -132,7 +132,7 @@ window.onload = function() {
     });
     socketio.on('pointmove', function(object) {
         var colorList = ['black', 'red', 'purple', 'blue', 'aqua', 'yellowgreen', 'yellow', 'brown', 'gray']
-        tmCanvas.strokeStyle = colorList[object.ui.color];
+        tmCanvas.strokeStyle = (object.ui.tool == 0) ? colorList[object.ui.color] : 'white';
         tmCanvas.setLineStyle(2 + object.ui.thickness * 2, "round", "round", 10);
         tmCanvas.drawLine(drawInfo.pointX, drawInfo.pointY, object.pointX, object.pointY);
         drawInfo.pointX = object.pointX;
@@ -141,10 +141,14 @@ window.onload = function() {
     socketio.on('pointend', function(object) {
 
     });
+    socketio.on('clearcanvas', function(object) {
+        tmCanvas.clear();
+    });
     socketio.on('disconnect', function(object) {
         delete participantInfo[object.id];
         updateParticipantList();
     });
+    
     var updateParticipantList = function() {
         var element = document.getElementById('participantList');
         for (var i in element.options) {
@@ -155,6 +159,7 @@ window.onload = function() {
             element.options[count++] = new Option(participantInfo[i].name);
         }
     }
+    
     this.talk = function() {
         var element = document.getElementById('talkInput');
         var text = element.value;
@@ -178,7 +183,9 @@ window.onload = function() {
         selectedUI.tool = parseInt(val) - 1;
         objimg[selectedUI.tool].src = 'images/' + toolList[selectedUI.tool] +'_on.png';
     }
-    
+    this.clickNewSheet = function(val) {
+        socketio.emit('clearcanvas', {});
+    }
     this.clickThicknessUI = function(val) {
         var objimg = [];
         for (var i = 0; i < 4; ++i) {
