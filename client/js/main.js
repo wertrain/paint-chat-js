@@ -15,12 +15,7 @@ window.onload = function() {
         thickness: 0, // 選択中の太さ 0 ～ 3
         color: 0      // 選択中の色
     };
-    var drawInfo = {
-        pointX: null,
-        pointY: null,
-    };
-    
-    
+
     var query = window.location.search.substring(1);
     var params = query.split('&');
     for (var i = 0; i < params.length; ++i) {
@@ -84,18 +79,18 @@ window.onload = function() {
     tmCanvasElement.event.pointstart(function(e) {
         input = {x: e.pointX, y: e.pointY};
         e.stop();
-        socketio.emit('pointstart', {ui: selectedUI, pointX: input.x, pointY: input.y});
+        socketio.emit('pointstart', {id: user.id, ui: selectedUI, pointX: input.x, pointY: input.y});
     });
     tmCanvasElement.event.pointmove(function(e) {
         if (input === null) return ;
         input = {x: e.pointX, y: e.pointY};
         e.stop();
-        socketio.emit('pointmove', {ui: selectedUI, pointX: input.x, pointY: input.y});
+        socketio.emit('pointmove', {id: user.id, ui: selectedUI, pointX: input.x, pointY: input.y});
     });
     tmCanvasElement.event.pointend(function(e) {
         input = null;
         e.stop();
-        //socketio.emit('pointend', {});
+        socketio.emit('pointend', {id: user.id});
         
         // Canvas の内容を丸々送信する
         var canvas = document.getElementById('canvas');
@@ -108,7 +103,7 @@ window.onload = function() {
     socketio.on('connected', function(object) {
         user.name = object.name;
         user.id = object.id;
-
+        user.drawInfo = {pointX: null, pointY: null};
         // キャンバスの内容を復元
         {
             var canvas = document.getElementById('canvas');
@@ -117,7 +112,7 @@ window.onload = function() {
             imageObj.onload = function() {
                 context.drawImage(this, 0, 0);
             };
-            console.log(object.canvasDataUrl);
+            //console.log(object.canvasDataUrl);
             imageObj.src = object.canvasDataUrl;
         }
         
@@ -128,7 +123,7 @@ window.onload = function() {
         var otheruser = {};
         otheruser.name = object.name;
         otheruser.id = object.id;
-
+        otheruser.drawInfo = {pointX: null, pointY: null};
         participantInfo[object.id] = otheruser;
         updateParticipantList();
     });
@@ -140,19 +135,23 @@ window.onload = function() {
             message : message + '\n' + str;
     });
     socketio.on('pointstart', function(object) {
-        drawInfo.pointX = object.pointX;
-        drawInfo.pointY = object.pointY;
+        participantInfo[object.id].drawInfo.pointX = object.pointX;
+        participantInfo[object.id].drawInfo.pointY = object.pointY;
     });
     socketio.on('pointmove', function(object) {
         var colorList = ['black', 'red', 'purple', 'blue', 'aqua', 'yellowgreen', 'yellow', 'brown', 'gray']
         tmCanvas.strokeStyle = (object.ui.tool == 0) ? colorList[object.ui.color] : 'white';
         tmCanvas.setLineStyle(2 + object.ui.thickness * 2, "round", "round", 10);
-        tmCanvas.drawLine(drawInfo.pointX, drawInfo.pointY, object.pointX, object.pointY);
-        drawInfo.pointX = object.pointX;
-        drawInfo.pointY = object.pointY;
+        tmCanvas.drawLine(
+          participantInfo[object.id].drawInfo.pointX, 
+          participantInfo[object.id].drawInfo.pointY,
+          object.pointX, object.pointY);
+        participantInfo[object.id].drawInfo.pointX = object.pointX;
+        participantInfo[object.id].drawInfo.pointY = object.pointY;
     });
     socketio.on('pointend', function(object) {
-
+        participantInfo[object.id].drawInfo.pointX = null;
+        participantInfo[object.id].drawInfo.pointY = null;
     });
     socketio.on('clearcanvas', function(object) {
         tmCanvas.clear();
@@ -209,7 +208,6 @@ window.onload = function() {
         selectedUI.thickness = parseInt(val) - 1;
         objimg[selectedUI.thickness].src = 'images/thickness' + val +'_on.png';
     }
-    
     this.clickColorUI = function(val) {
         var colorList = ['black', 'red', 'purple', 'blue', 'aqua', 'yellowgreen', 'yellow', 'brown', 'gray']
         var objimg = [];
