@@ -10,9 +10,12 @@
     app.get('/', function (req, res) {
         res.sendFile(__dirname + '/build/index.html');
     });
-    var userInputName = '名なしさん';
+    var userInputName = '';
     app.post('/chat', function (req, res) {
         userInputName = req.body.nameInput;
+        if (userInputName.length === 0) {
+            userInputName = '名なし';
+        }
         res.sendFile(__dirname + '/build/main.html');
     });
     var http = require('http');
@@ -30,7 +33,7 @@
             socket.broadcast.emit('join', user);
             var msg = user.name + '(' + socket.id + ')' + 'が入室しました ';
             console.log(msg);
-            socket.emit('message', {name: 'システム', message: 'ようこそ。'});
+            socket.emit('message', {name: 'システム', message: 'ようこそ。' + userInputName + 'さん。'});
             socket.broadcast.emit('message', {name: 'システム', message: user.name + 'さんが入室しました。'});
         });
         socket.on('disconnect', function () {
