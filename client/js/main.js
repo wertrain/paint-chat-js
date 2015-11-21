@@ -16,18 +16,8 @@ window.onload = function() {
         color: 0      // 選択中の色
     };
 
-    var query = window.location.search.substring(1);
-    var params = query.split('&');
-    for (var i = 0; i < params.length; ++i) {
-        var pos = params[i].indexOf('=');
-        if (pos > 0) {
-            var key = params[i].substring(0, pos);
-            var val = params[i].substring(pos + 1);
-            if (key == 'name') {
-                socketio.emit('connected', decodeURI(val));
-            }
-        }
-    }
+    // 接続通知（これでPOSTされた名前などが返却される）
+    socketio.emit('connected', {});
     
     var init = function() {
         var toolList = function() {

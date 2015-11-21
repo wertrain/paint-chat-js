@@ -3,9 +3,18 @@
  */
 (function() {
     var express = require('express');
+    var bodyParser = require('body-parser');
     var app = express();
     app.use(express.static(__dirname + '/build'));
-
+    app.use(bodyParser.urlencoded({extended: true}));
+    app.get('/', function (req, res) {
+        res.sendFile(__dirname + '/build/index.html');
+    });
+    var userInputName = '名なしさん';
+    app.post('/chat', function (req, res) {
+        userInputName = req.body.nameInput;
+        res.sendFile(__dirname + '/build/main.html');
+    });
     var http = require('http');
     var server = http.createServer(app);
     var io = require('socket.io').listen(server);
@@ -14,8 +23,8 @@
     var participants = [];
     var canvasDataUrl = '';
     io.sockets.on('connection', function (socket) {
-        socket.on('connected', function (name) {
-            user = {name: name, id: socket.id, canvasDataUrl: canvasDataUrl};
+        socket.on('connected', function () {
+            user = {name: userInputName, id: socket.id, canvasDataUrl: canvasDataUrl};
             participants[socket.id] = user;
             socket.emit('connected', user);
             socket.broadcast.emit('join', user);
