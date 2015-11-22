@@ -45,6 +45,7 @@
                 var msg = user.name + '(' + socket.id + ')' + 'が退室しました ';
                 console.log(msg);
                 delete participants[socket.id];
+                socket.broadcast.emit('leave', {id: socket.id});
                 socket.broadcast.emit('message', {name: 'システム', message: user.name + 'さんが退室しました。'});
             }
         });

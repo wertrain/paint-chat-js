@@ -129,6 +129,10 @@ window.onload = function() {
         participantInfo[object.id] = otheruser;
         updateParticipantList();
     });
+    socketio.on('leave', function(object) {
+        delete participantInfo[object.id];
+        updateParticipantList();
+    });
     socketio.on('message', function(messageObject) {
         var message = messageObject.name + ': ' + messageObject.message;
         var element = document.getElementById('logArea');
@@ -138,14 +142,18 @@ window.onload = function() {
     });
     socketio.on('pointstart', function(object) {
         if (false === checkDrawInfo(object.id)) {
-            return false;
+            return;
         }
         participantInfo[object.id].drawInfo.pointX = object.pointX;
         participantInfo[object.id].drawInfo.pointY = object.pointY;
     });
     socketio.on('pointmove', function(object) {
+        if (false === checkDrawInfo(object.id)) {
+            return;
+        }
         var colorList = ['black', 'red', 'purple', 'blue', 'aqua', 'yellowgreen', 'yellow', 'brown', 'gray']
         tmCanvas.strokeStyle = (object.ui.tool == 0) ? colorList[object.ui.color] : 'white';
+        // 消しゴムは太さを二倍に
         var thickness = (2 + (object.ui.thickness * 2)) * ((object.ui.tool == 0) ? 1 : 2);
         tmCanvas.setLineStyle(thickness, "round", "round", 10);
         tmCanvas.drawLine(
@@ -156,15 +164,14 @@ window.onload = function() {
         participantInfo[object.id].drawInfo.pointY = object.pointY;
     });
     socketio.on('pointend', function(object) {
+        if (false === checkDrawInfo(object.id)) {
+            return;
+        }
         participantInfo[object.id].drawInfo.pointX = null;
         participantInfo[object.id].drawInfo.pointY = null;
     });
     socketio.on('clearcanvas', function(object) {
         tmCanvas.clear();
-    });
-    socketio.on('disconnect', function(object) {
-        delete participantInfo[object.id];
-        updateParticipantList();
     });
     
     var updateParticipantList = function() {
