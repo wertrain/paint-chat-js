@@ -87,8 +87,20 @@ window.onload = function() {
         var canvasDataUrl = canvas.toDataURL();
         socketio.emit('canvas', canvasDataUrl);
     });
-    
+    tmCanvasElement.event.hover(function(e) {
+        input = null;
+        e.stop();
+    });
     //-------------------------------------------------------------------------
+    var checkDrawInfo = function(id) {
+        if (false === (id in participantInfo)) {
+            return false;
+        }
+        if ('undefined' === typeof participantInfo[id].drawInfo) {
+            return false;
+        }
+        return true;
+    }
     // socket.io
     socketio.on('connected', function(object) {
         user.name = object.name;
@@ -125,13 +137,17 @@ window.onload = function() {
             message : message + '\n' + str;
     });
     socketio.on('pointstart', function(object) {
+        if (false === checkDrawInfo(object.id)) {
+            return false;
+        }
         participantInfo[object.id].drawInfo.pointX = object.pointX;
         participantInfo[object.id].drawInfo.pointY = object.pointY;
     });
     socketio.on('pointmove', function(object) {
         var colorList = ['black', 'red', 'purple', 'blue', 'aqua', 'yellowgreen', 'yellow', 'brown', 'gray']
         tmCanvas.strokeStyle = (object.ui.tool == 0) ? colorList[object.ui.color] : 'white';
-        tmCanvas.setLineStyle(2 + object.ui.thickness * 2, "round", "round", 10);
+        var thickness = (2 + (object.ui.thickness * 2)) * ((object.ui.tool == 0) ? 1 : 2);
+        tmCanvas.setLineStyle(thickness, "round", "round", 10);
         tmCanvas.drawLine(
           participantInfo[object.id].drawInfo.pointX, 
           participantInfo[object.id].drawInfo.pointY,
