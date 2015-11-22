@@ -27,9 +27,13 @@
     var canvasDataUrl = '';
     io.sockets.on('connection', function (socket) {
         socket.on('connected', function () {
-            user = {name: userInputName, id: socket.id, canvasDataUrl: canvasDataUrl};
-            participants[socket.id] = user;
+            user = {name: userInputName, id: socket.id, canvasDataUrl: canvasDataUrl};         
             socket.emit('connected', user);
+            // 既存の参加者情報を送る
+            for (var i in participants) {
+                 socket.emit('join', participants[i]);
+            }
+            participants[socket.id] = user;
             socket.broadcast.emit('join', user);
             var msg = user.name + '(' + socket.id + ')' + 'が入室しました ';
             console.log(msg);
